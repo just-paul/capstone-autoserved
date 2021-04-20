@@ -3,6 +3,7 @@ import pandas as pd
 import numpy as np
 from joblib import load
 from dotenv import load_dotenv
+import os
 
 load_dotenv()
 
@@ -18,7 +19,7 @@ def hello():
 
 @app.route("/recommend", methods=["POST"])
 def score_inputs():
-    auth_token = request.headers['Authorization']
+    auth_token = request.headers.get('Authorization')
     if auth_token != "Bearer {}".format(os.environ['SECRET_TOKEN']):
       return jsonify({ "status": "Unauthorized" }), 401
 

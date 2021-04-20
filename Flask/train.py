@@ -16,6 +16,7 @@ load_dotenv()
 print("Loading data....")
 
 df = pd.read_excel('../Final_Noteboook/FINAL_FINAL 2.xlsx', index_col='Primary Key')
+df = df[ (df['Service Category'] != 'Batteries') ]
 df2 = df[['Mileage In', 'Make', 'Model', 'Year', 'Service Category']]
 df3 = df2.groupby(['Make', 'Year','Model', 'Mileage In']).agg(list)
 df3 = df3.reset_index()
@@ -31,7 +32,6 @@ df4 = df3.join(pd.DataFrame(mlb.fit_transform(df3.pop('Service Category')),
 X = df4[['Make', 'Year','Model', 'Mileage In']]
 
 num_categories = len(df['Service Category'].value_counts())
-num_categories
 
 Y = df4.iloc[:,-num_categories:]
 
@@ -39,6 +39,14 @@ Y = df4.iloc[:,-num_categories:]
 print("Train / test split....")
 X_train, Y_train, X_test, Y_test = iterative_train_test_split(X.to_numpy(), Y.to_numpy(), test_size = 0.2)
 
+X_train = pd.DataFrame(X_train ,columns=X.columns)
+X_test = pd.DataFrame(X_test, columns=X.columns)
+
+Y_train = pd.DataFrame(Y_train, columns=Y.columns)
+Y_test = pd.DataFrame(Y_test, columns=Y.columns)
+
+X_train['Mileage In'] = X_train['Mileage In'].astype(int)
+X_test['Mileage In'] = X_test['Mileage In'].astype(int)
 
 # Encoder
 print("Creating encoder....")

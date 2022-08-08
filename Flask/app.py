@@ -20,8 +20,8 @@ def hello():
 @app.route("/recommend", methods=["POST"])
 def score_inputs():
     auth_token = request.headers.get('Authorization')
-    if auth_token != "Bearer {}".format(os.environ['SECRET_TOKEN']):
-      return jsonify({ "status": "Unauthorized" }), 401
+    if auth_token != f"Bearer {os.environ['SECRET_TOKEN']}":
+        return jsonify({ "status": "Unauthorized" }), 401
 
     serv_cats = ['Accessories (Gauges, Power Accessories, Vision & Air Bag)', 'Brakes',
        'Change Oil', 'Complete Vehicle Inspection', 'Cooling System',
